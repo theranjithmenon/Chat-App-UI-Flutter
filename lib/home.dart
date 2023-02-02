@@ -73,7 +73,7 @@ class Homepage extends StatelessWidget {
                             ),
                             Text(message[index],
                                 style: const TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w300))
+                                    fontSize: 13, fontWeight: FontWeight.w400))
                           ],
                         ),
                         const Spacer(),
@@ -82,7 +82,7 @@ class Homepage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PersonDetails(
+                                      builder: (context) => MessageBox(
                                             picture: picture,
                                             personName: personName,
                                             time: time,

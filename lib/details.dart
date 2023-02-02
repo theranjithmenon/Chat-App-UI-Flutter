@@ -1,36 +1,62 @@
 import 'package:flutter/Material.dart';
 
-class PersonDetails extends StatefulWidget {
+class MessageBox extends StatefulWidget {
   List personName;
   List picture;
   List time;
   List message;
   int index;
 
-  PersonDetails({Key? key,
-    required this.picture,
-    required this.personName,
-    required this.time,
-    required this.message,
-    required this.index})
+  MessageBox(
+      {Key? key,
+      required this.picture,
+      required this.personName,
+      required this.time,
+      required this.message,
+      required this.index})
       : super(key: key);
 
   @override
-  State<PersonDetails> createState() => _PersonDetailsState();
+  State<MessageBox> createState() => _MessageBoxState();
 }
 
-class _PersonDetailsState extends State<PersonDetails> {
-
+class _MessageBoxState extends State<MessageBox> {
   String myMessage = "";
   final textController = TextEditingController();
   bool myMessageDisplay = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.phone)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt)),
-      ], title: Text(widget.personName[widget.index])),
+      appBar: AppBar(
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.phone)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt)),
+          ],
+          title: GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: SizedBox(
+                          height: 500,
+                          width: 150,
+                          child: Column(
+                            children: [
+                              Image(
+                                image:
+                                    NetworkImage(widget.picture[widget.index]),
+                                fit: BoxFit.cover,
+                              ),
+                              Text(widget.personName[widget.index])
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: Text(widget.personName[widget.index]))),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -43,7 +69,8 @@ class _PersonDetailsState extends State<PersonDetails> {
                   children: [
                     CircleAvatar(
                       radius: 65,
-                      backgroundImage: NetworkImage(widget.picture[widget.index]),
+                      backgroundImage:
+                          NetworkImage(widget.picture[widget.index]),
                     ),
                     const SizedBox(
                       height: 15,
@@ -67,13 +94,14 @@ class _PersonDetailsState extends State<PersonDetails> {
               children: [
                 Spacer(),
                 Visibility(
-                  visible: myMessageDisplay,
+                    visible: myMessageDisplay,
                     child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey, borderRadius: BorderRadius.circular(25)),
-                  child: Text(myMessage),
-                )),
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Colors.blueGrey,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Text(myMessage),
+                    )),
               ],
             ),
             const SizedBox(height: 10),
@@ -90,21 +118,22 @@ class _PersonDetailsState extends State<PersonDetails> {
                     child: TextField(
                       controller: textController,
                       decoration: const InputDecoration(
-                          hintText: "Message",
-                          border: InputBorder.none
-                      ),
+                          hintText: "Message", border: InputBorder.none),
                     ),
                   ),
                   const Spacer(),
                   IconButton(
                       onPressed: () {}, icon: const Icon(Icons.camera_alt)),
                   IconButton(onPressed: () {}, icon: const Icon(Icons.mic)),
-                  IconButton(onPressed: () {
-                    setState(() {
-                      myMessage = textController.text;
-                      myMessageDisplay = true;
-                    });
-                  }, icon: const Icon(Icons.send))
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          myMessage = textController.text;
+                          myMessageDisplay = true;
+                          textController.text = "";
+                        });
+                      },
+                      icon: const Icon(Icons.send))
                 ],
               ),
             )
